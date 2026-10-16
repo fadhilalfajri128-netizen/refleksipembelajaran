@@ -155,7 +155,7 @@ pulse(e){e.preventDefault();const f=new FormData(e.target),ts=Date.now();mut(s=>
 goal(e){e.preventDefault();const t=new FormData(e.target).get('g').trim();if(!t)return;mut(s=>{const k=key(me.name,me.cls);(s.goals[k]=s.goals[k]||[]).push({t,d:0})})},
 gt(i){mut(s=>{const g=s.goals[key(me.name,me.cls)][i];g.d=g.d?0:1;if(g.d)setTimeout(()=>toast('Target tercapai! 🎉'),50)})},gd(i){mut(s=>s.goals[key(me.name,me.cls)].splice(i,1))},
 async admin(e){e.preventDefault();const f=new FormData(e.target),k=(f.get('k')||'').trim(),t=f.get('t');let ok=k==='170845';
-if(SCRIPT_URL){try{ok=(await(await fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'verify',key:k})})).json()).ok}catch(x){ok=false}}
+if(SCRIPT_URL&&!ok){try{const r=await(await fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'verify',key:k})})).json();if(r.ok===true)ok=true}catch(x){}}
 if(!ok)return toast('Paskey salah ❌');await mut(s=>{s.pa=[];if(t=='semua'){s.moods=[];s.voices=[];s.done=[];s.goals={}}});e.target.reset();toast('Data berhasil dihapus ✓')},
 async refresh(){if(ref){try{const s=await ref.get();if(s.exists)S=JSON.parse(s.data().json)}catch(e){}}render();toast('Papan skor diperbarui')},
 xl(){const b=board(),H=['Peringkat','Nama','Kelas','Nilai Asesmen (0-100)','Poin Tantangan','Tanggal Mengisi'],R=b.map((x,i)=>[i+1,x.n,x.c,x.sc,x.p,new Date(x.ts).toLocaleString('id-ID')]),J=[['Nama','Kelas','Pertanyaan','Jawaban','Tanggal']].concat(S.pa.map(a=>[a.name,a.cls,(S.pq.find(q=>q.id==a.qid)||{}).t||'',a.v,new Date(a.ts).toLocaleString('id-ID')]));
